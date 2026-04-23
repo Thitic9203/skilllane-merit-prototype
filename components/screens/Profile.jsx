@@ -37,11 +37,15 @@ const ProfileScreen = ({ data, setScreen, isMobile }) => {
             fontSize:11, fontWeight:600, letterSpacing:'0.04em',
           }} className="num">#{currentUser.rank}</div>
           {rankDelta ? (
-            <div className="num" style={{
-              marginTop:8, textAlign:'center',
-              fontSize:12, fontWeight:500,
-              color: rankDelta > 0 ? 'var(--accent-gold)' : 'var(--text-muted)',
-            }}>
+            <div
+              className="num"
+              aria-label={`Moved ${rankDelta > 0 ? 'up' : 'down'} ${Math.abs(rankDelta)} ${Math.abs(rankDelta) === 1 ? 'place' : 'places'} year over year`}
+              style={{
+                marginTop:8, textAlign:'center',
+                fontSize:12, fontWeight:500,
+                color: rankDelta > 0 ? 'var(--accent-gold)' : 'var(--error)',
+              }}
+            >
               {rankDelta > 0 ? '↑' : '↓'} {Math.abs(rankDelta)} {Math.abs(rankDelta) === 1 ? 'place' : 'places'} YoY
             </div>
           ) : null}

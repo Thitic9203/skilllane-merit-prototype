@@ -22,8 +22,17 @@ Caveat: this repo is for preview only. Anything heading toward production belong
 .
 ├── index.html              # Entry point; loads React, Babel, and all JSX
 ├── components/
-│   ├── screens/            # Dashboard.jsx, Leaderboard.jsx, Rewards.jsx, ...
-│   └── ...                 # Shared UI (NotificationPanel, SearchPalette, etc.)
+│   ├── App.jsx             # Root shells (Desktop + Mobile), state, routing
+│   ├── Shared.jsx          # TopNav, Sidebar, MobileTabs, Avatar, Icon, etc.
+│   ├── Overlays.jsx        # NotificationsPanel, SearchPopover, MobileMenuDrawer
+│   ├── Toast.jsx           # ToastProvider + useToast() hook
+│   ├── States.jsx          # Loading / empty / error state primitives
+│   ├── Skeleton.jsx        # Skeleton loaders
+│   ├── ScreenHeader.jsx    # Page header component
+│   ├── Reference.jsx       # Preview toolbar (state-mode tabs)
+│   ├── Shortcuts.jsx       # Keyboard shortcut helpers
+│   └── screens/            # Dashboard, History, Rewards, Leaderboard,
+│                           # Award, Team, Feed, Profile, Login
 ├── data/
 │   └── mockdata.js         # Demo user, leaderboard, activities, rewards
 ├── styles/
