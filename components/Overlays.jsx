@@ -428,6 +428,8 @@ const MobileMenuDrawer = ({ open, onClose, screen, setScreen, isAdmin, currentUs
     { id: 'history',      label: 'My Activities', icon: 'history',  desc: 'Log, edit and track entries' },
     { id: 'leaderboard',  label: 'Leaderboard',   icon: 'medal',    desc: 'Rankings this month' },
     { id: 'rewards',      label: 'Rewards',       icon: 'gift',     desc: 'Catalog and redemptions' },
+    { id: 'feed',         label: 'Recognition',   icon: 'sparkles', desc: 'Peer recognition feed' },
+    { id: 'profile',      label: 'My Profile',    icon: 'user',     desc: 'Badges and summary' },
   ];
   const adminItems = [
     { id: 'approve',      label: 'Approvals',     icon: 'send',     desc: 'Review pending entries' },

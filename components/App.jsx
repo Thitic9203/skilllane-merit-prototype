@@ -1,5 +1,5 @@
 // Main App
-const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'approve', 'reports'];
+const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'feed', 'profile', 'approve', 'reports'];
 
 const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, bellRef, searchWrapperRef, searchQuery, setSearchQuery, searchOpen, setSearchOpen }) => {
   const screenMap = {
@@ -7,6 +7,8 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
     history:     <HistoryScreen  data={data} isMobile={false}/>,
     rewards:     <RewardsScreen  data={data} isMobile={false}/>,
     leaderboard: <LeaderboardScreen data={data} isMobile={false}/>,
+    feed:        <FeedScreen     data={data} isMobile={false}/>,
+    profile:     <ProfileScreen  data={data} setScreen={setScreen} isMobile={false}/>,
     approve:     <AwardScreen    data={data} setScreen={setScreen} isMobile={false}/>,
     reports:     <TeamDashboard  data={data} setScreen={setScreen} isMobile={false}/>,
   };
@@ -16,7 +18,7 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
       <TopNav
         currentUser={data.currentUser} theme={theme}
         onThemeToggle={() => setTheme(theme==='dark'?'light':'dark')}
-        onAvatarClick={()=>setScreen('dashboard')}
+        onAvatarClick={()=>setScreen('profile')}
         onOpenNotifications={() => setNotifOpen(o => !o)}
         bellRef={bellRef} searchWrapperRef={searchWrapperRef}
         searchQuery={searchQuery} onSearchQuery={setSearchQuery}
@@ -49,6 +51,8 @@ const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, noti
     history:     <HistoryScreen  data={data} isMobile={true}/>,
     rewards:     <RewardsScreen  data={data} isMobile={true}/>,
     leaderboard: <LeaderboardScreen data={data} isMobile={true}/>,
+    feed:        <FeedScreen     data={data} isMobile={true}/>,
+    profile:     <ProfileScreen  data={data} setScreen={setScreen} isMobile={true}/>,
     approve:     <AwardScreen    data={data} setScreen={setScreen} isMobile={true}/>,
     reports:     <TeamDashboard  data={data} setScreen={setScreen} isMobile={true}/>,
   };
@@ -58,7 +62,7 @@ const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, noti
       <TopNav
         currentUser={data.currentUser} theme={theme}
         onThemeToggle={() => setTheme(theme==='dark'?'light':'dark')}
-        onAvatarClick={()=>setScreen('dashboard')} isMobile
+        onAvatarClick={()=>setScreen('profile')} isMobile
         onOpenNotifications={() => setNotifOpen(true)}
         onOpenMobileMenu={() => setMenuOpen(true)}
         notifUnread={unreadCount}

@@ -180,6 +180,8 @@ const Sidebar = ({ screen, setScreen, isAdmin }) => {
     { id: 'history',      label: 'My Activities',  icon: 'history' },
     { id: 'leaderboard',  label: 'Leaderboard',    icon: 'medal' },
     { id: 'rewards',      label: 'Rewards',        icon: 'gift' },
+    { id: 'feed',         label: 'Recognition',    icon: 'sparkles' },
+    { id: 'profile',      label: 'My Profile',     icon: 'user' },
   ];
   const adminItems = [
     { id: 'approve',      label: 'Approvals',      icon: 'send' },
@@ -245,8 +247,9 @@ const MobileTabs = ({ screen, setScreen, isAdmin }) => {
   const base = [
     { id: 'dashboard',   label: 'Home',        icon: 'home' },
     { id: 'history',     label: 'Activities',  icon: 'history' },
-    { id: 'leaderboard', label: 'Leaderboard', icon: 'medal' },
+    { id: 'feed',        label: 'Recognition', icon: 'sparkles' },
     { id: 'rewards',     label: 'Rewards',     icon: 'gift' },
+    { id: 'profile',     label: 'Profile',     icon: 'user' },
   ];
   const items = isAdmin
     ? [...base, { id: 'approve', label: 'Approve', icon: 'send' }]
