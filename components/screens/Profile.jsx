@@ -1,7 +1,9 @@
 // My Profile — avatar, total points, badges, activity summary
 const ProfileScreen = ({ data, setScreen, isMobile }) => {
+  const toast = useToast();
   const { currentUser, activity } = data;
   const [stateMode, setStateMode] = React.useState('normal');
+  const rankDelta = currentUser.rankDeltaYoY;
   const earned    = activity.filter(t => t.amount > 0).reduce((a,b)=>a+b.amount, 0);
   const redeemed  = Math.abs(activity.filter(t => t.amount < 0).reduce((a,b)=>a+b.amount, 0));
   const recognitions = activity.filter(t => t.type === 'peer' || t.type === 'earned').length;
@@ -34,14 +36,23 @@ const ProfileScreen = ({ data, setScreen, isMobile }) => {
             background:'var(--nav-navy)', color:'#fff',
             fontSize:11, fontWeight:600, letterSpacing:'0.04em',
           }} className="num">#{currentUser.rank}</div>
+          {rankDelta ? (
+            <div className="num" style={{
+              marginTop:8, textAlign:'center',
+              fontSize:12, fontWeight:500,
+              color: rankDelta > 0 ? 'var(--accent-gold)' : 'var(--text-muted)',
+            }}>
+              {rankDelta > 0 ? '↑' : '↓'} {Math.abs(rankDelta)} {Math.abs(rankDelta) === 1 ? 'place' : 'places'} YoY
+            </div>
+          ) : null}
         </div>
         <div style={{flex:1, minWidth:0}}>
           <div className="t-label muted">{currentUser.team} · Member since {currentUser.joined}</div>
           <h1 style={{margin:'6px 0 4px', fontSize: isMobile?28:36, fontWeight:600, letterSpacing:'-0.02em'}}>{currentUser.name}</h1>
           <p className="t-body muted" style={{margin:0}}>{currentUser.role}</p>
           <div style={{display:'flex', gap:10, marginTop:16, flexWrap:'wrap', justifyContent: isMobile?'center':'flex-start'}}>
-            <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}}>Edit profile</button>
-            <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}}>
+            <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}} onClick={() => toast.info('Edit profile', 'Coming soon.')}>Edit profile</button>
+            <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}} onClick={() => setScreen('feed')}>
               <Icon name="sparkles" size={14}/> Recognize a colleague
             </button>
           </div>

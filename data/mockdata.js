@@ -8,6 +8,7 @@ window.MERIT_DATA = {
     balance: 4820,
     lifetime: 18340,
     rank: 7,
+    rankDeltaYoY: 2,
     avatarInitials: 'TC',
     avatarTone: 'gold',
     joined: 'March 2023',
