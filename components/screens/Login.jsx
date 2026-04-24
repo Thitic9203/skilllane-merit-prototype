@@ -43,7 +43,7 @@ const LoginScreen = ({ onSignIn, theme }) => {
         setError({ title: 'Unauthorized email domain', body: 'SkillLane Merit is available to @skilllane.com accounts only. Sign in with your work email.' });
         return;
       }
-      onSignIn();
+      onSignIn(mail);
     }, 900);
   };
 
@@ -183,9 +183,10 @@ const LoginScreenMobile = ({ onSignIn }) => {
   const [phase, setPhase] = React.useState('idle');
   const [error, setError] = React.useState(null);
   const ACCOUNTS = [
-    { email: 'thitichaya.c@skilllane.com',ok: true, reason: null },
-    { email: 'guest@gmail.com',          ok: false, reason: 'domain' },
-    { email: 'deactivated@skilllane.com',ok: false, reason: 'deactivated' },
+    { email: 'thitichaya.c@skilllane.com', ok: true,  reason: null },
+    { email: 'somsak.c@skilllane.com',     ok: true,  reason: null },
+    { email: 'guest@gmail.com',            ok: false, reason: 'domain' },
+    { email: 'deactivated@skilllane.com',  ok: false, reason: 'deactivated' },
   ];
   const attempt = (mail) => {
     setError(null); setPhase('loading');
@@ -199,7 +200,7 @@ const LoginScreenMobile = ({ onSignIn }) => {
           : { title: 'Unauthorized email domain', body: 'Sign in with your @skilllane.com work email.' });
         return;
       }
-      onSignIn();
+      onSignIn(mail);
     }, 800);
   };
 

@@ -1,16 +1,17 @@
 // Main App
-const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'feed', 'profile', 'approve', 'reports'];
+const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'feed', 'profile', 'editprofile', 'approve', 'reports'];
 
 const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, bellRef, searchWrapperRef, searchQuery, setSearchQuery, searchOpen, setSearchOpen }) => {
   const screenMap = {
-    dashboard:   <Dashboard      data={data} setScreen={setScreen} isMobile={false}/>,
-    history:     <HistoryScreen  data={data} isMobile={false}/>,
-    rewards:     <RewardsScreen  data={data} isMobile={false}/>,
+    dashboard:   <Dashboard         data={data} setScreen={setScreen} isMobile={false}/>,
+    history:     <HistoryScreen     data={data} isMobile={false}/>,
+    rewards:     <RewardsScreen     data={data} isMobile={false}/>,
     leaderboard: <LeaderboardScreen data={data} isMobile={false}/>,
-    feed:        <FeedScreen     data={data} isMobile={false}/>,
-    profile:     <ProfileScreen  data={data} setScreen={setScreen} isMobile={false}/>,
-    approve:     <AwardScreen    data={data} setScreen={setScreen} isMobile={false}/>,
-    reports:     <TeamDashboard  data={data} setScreen={setScreen} isMobile={false}/>,
+    feed:        <FeedScreen        data={data} isMobile={false}/>,
+    profile:     <ProfileScreen     data={data} setScreen={setScreen} isMobile={false}/>,
+    editprofile: <EditProfileScreen data={data} setScreen={setScreen} isMobile={false}/>,
+    approve:     <AwardScreen       data={data} setScreen={setScreen} isMobile={false}/>,
+    reports:     <TeamDashboard     data={data} setScreen={setScreen} isMobile={false}/>,
   };
   const unreadCount = (data.notifications || []).filter(n => n.unread).length;
   return (
@@ -51,10 +52,11 @@ const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, noti
     history:     <HistoryScreen  data={data} isMobile={true}/>,
     rewards:     <RewardsScreen  data={data} isMobile={true}/>,
     leaderboard: <LeaderboardScreen data={data} isMobile={true}/>,
-    feed:        <FeedScreen     data={data} isMobile={true}/>,
-    profile:     <ProfileScreen  data={data} setScreen={setScreen} isMobile={true}/>,
-    approve:     <AwardScreen    data={data} setScreen={setScreen} isMobile={true}/>,
-    reports:     <TeamDashboard  data={data} setScreen={setScreen} isMobile={true}/>,
+    feed:        <FeedScreen        data={data} isMobile={true}/>,
+    profile:     <ProfileScreen     data={data} setScreen={setScreen} isMobile={true}/>,
+    editprofile: <EditProfileScreen data={data} setScreen={setScreen} isMobile={true}/>,
+    approve:     <AwardScreen       data={data} setScreen={setScreen} isMobile={true}/>,
+    reports:     <TeamDashboard     data={data} setScreen={setScreen} isMobile={true}/>,
   };
   const unreadCount = (data.notifications || []).filter(n => n.unread).length;
   return (
@@ -141,7 +143,12 @@ const useViewportAuto = () => {
 };
 
 const App = () => {
-  const data = window.MERIT_DATA;
+  const baseData = window.MERIT_DATA;
+  const [activeUser, setActiveUser] = React.useState(
+    () => window.MERIT_USERS[localStorage.getItem('sklm.email') || 'thitichaya.c@skilllane.com']
+         || window.MERIT_USERS['thitichaya.c@skilllane.com']
+  );
+  const data = { ...baseData, currentUser: activeUser };
   const toast = useToast();
   const vpAuto = useViewportAuto();
   const [screen,  setScreenRaw]  = React.useState(() => localStorage.getItem('sklm.screen')  || 'dashboard');
@@ -203,17 +210,21 @@ const App = () => {
     );
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = (email) => {
+    const user = window.MERIT_USERS[email] || window.MERIT_USERS['thitichaya.c@skilllane.com'];
+    setActiveUser(user);
+    localStorage.setItem('sklm.email', email);
     setAuth(true);
     setTimeout(() => {
       toast.success(
-        `Welcome back, ${data.currentUser.name.split(' ')[0]}`,
-        `You have ${data.currentUser.balance.toLocaleString()} merit points available.`
+        `Welcome back, ${user.firstName}`,
+        `You have ${user.balance.toLocaleString()} merit points available.`
       );
     }, 200);
   };
 
   const handleSignOut = () => {
+    localStorage.removeItem('sklm.email');
     setAuth(false);
     toast.info('Signed out', 'Your session ended. Sign in again anytime.', { duration: 2600 });
   };

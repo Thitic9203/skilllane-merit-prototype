@@ -55,7 +55,7 @@ const ProfileScreen = ({ data, setScreen, isMobile }) => {
           <h1 style={{margin:'6px 0 4px', fontSize: isMobile?28:36, fontWeight:600, letterSpacing:'-0.02em'}}>{currentUser.name}</h1>
           <p className="t-body muted" style={{margin:0}}>{currentUser.role}</p>
           <div style={{display:'flex', gap:10, marginTop:16, flexWrap:'wrap', justifyContent: isMobile?'center':'flex-start'}}>
-            <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}} onClick={() => toast.info('Edit profile', 'Coming soon.')}>Edit profile</button>
+            <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}} onClick={() => setScreen('editprofile')}>Edit profile</button>
             <button className="btn btn-ghost" style={{padding:'10px 16px', fontSize:13}} onClick={() => setScreen('feed')}>
               <Icon name="sparkles" size={14}/> Recognize a colleague
             </button>
