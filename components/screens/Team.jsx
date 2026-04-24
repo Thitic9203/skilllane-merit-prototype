@@ -90,7 +90,7 @@ const TeamDashboard = ({ data, isMobile, setScreen }) => {
       <div style={{display:'grid', gridTemplateColumns: isMobile?'1fr':'minmax(0, 1fr) minmax(0, 1fr)', gap: 24}}>
         {/* Top performers */}
         <section className="card" style={{padding: isMobile?20:28}}>
-          <SectionHeader title="Top performers — April"/>
+          <SectionHeader title={`Top performers — ${new Date().toLocaleDateString('en-US', { month: 'long' })}`}/>
           <div style={{display:'flex', flexDirection:'column', gap:2}}>
             {filteredPerformers.length === 0 ? (
             <div style={{padding:'24px 0', textAlign:'center', color:'var(--text-subtle)', fontSize:13}}>
