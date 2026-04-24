@@ -13,11 +13,22 @@ const HistoryScreen = ({ data, isMobile }) => {
     if (exporting) return;
     setExporting(true);
     setTimeout(() => {
+      const headers = ['Date', 'Description', 'From', 'Category', 'Points'];
+      const rows = filtered.map(tx => [
+        tx.date,
+        `"${(tx.note  || '').replace(/"/g, '""')}"`,
+        `"${(tx.from  || '').replace(/"/g, '""')}"`,
+        tx.category,
+        tx.amount,
+      ]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'merit-history.csv'; a.click();
+      URL.revokeObjectURL(url);
       setExporting(false);
-      toast.success(
-        `${filtered.length} transactions exported`,
-        'merit-history.csv has been generated and sent to your Downloads folder.'
-      );
+      toast.success(`${filtered.length} transactions exported`, 'merit-history.csv downloaded to your Downloads folder.');
     }, 650);
   };
 

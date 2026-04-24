@@ -9,6 +9,11 @@ const RewardsScreen = ({ data, isMobile }) => {
   const [stateMode, setStateMode] = React.useState('normal');
 
   const handleRedeem = (r) => {
+    if (currentUser.balance < r.cost) {
+      const need = (r.cost - currentUser.balance).toLocaleString();
+      toast.error('Not enough points', `You need ${need} more points to redeem "${r.title}".`);
+      return;
+    }
     // Simulate occasional out-of-stock error for demo realism
     if (r.id && r.id.endsWith && r.id.endsWith('9')) {
       toast.error("Couldn't redeem right now", `"${r.title}" is temporarily out of stock. Try again later.`);
@@ -139,8 +144,8 @@ const RewardCard = ({ r, balance, redeemed, onRedeem }) => {
             </div>
           </div>
           <button
-            onClick={!redeemed && canAfford ? onRedeem : undefined}
-            disabled={!canAfford || redeemed}
+            onClick={!redeemed ? onRedeem : undefined}
+            disabled={redeemed}
             style={{
               padding:'10px 14px', borderRadius:8, fontSize:13, fontWeight:600,
               background: redeemed ? 'color-mix(in oklch, var(--success) 14%, transparent)' : canAfford ? 'var(--nav-navy)' : 'var(--surface-muted)',

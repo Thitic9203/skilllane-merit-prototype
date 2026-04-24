@@ -79,6 +79,16 @@ const FeedScreen = ({ data, isMobile }) => {
               className="input"
               style={{resize:'vertical', minHeight:80, fontSize:14, lineHeight:1.55}}
             />
+            {!draft.trim() && (
+              <div className="t-caption muted" style={{marginTop:6, fontSize:12}}>
+                Tag a specific action or outcome — "unblocked the release by catching the edge case" lands better than "great work."
+              </div>
+            )}
+            {draft.trim().length > 0 && draft.trim().length < 10 && (
+              <div className="t-caption" style={{marginTop:6, fontSize:12, color:'var(--error)'}}>
+                At least 10 characters required ({draft.trim().length}/10)
+              </div>
+            )}
             <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:14, gap:12, flexWrap:'wrap'}}>
               <div style={{display:'flex', gap:6}}>
                 {[25, 50, 100, 200].map(v => (
