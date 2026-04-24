@@ -157,7 +157,7 @@ const App = () => {
   const [screen,  setScreenRaw]  = React.useState(() => localStorage.getItem('sklm.screen')  || 'dashboard');
   const [theme,   setThemeRaw]   = React.useState(() => localStorage.getItem('sklm.theme')   || 'light');
   const [vpPref,  setVpRaw]      = React.useState(() => localStorage.getItem('sklm.vp')      || 'auto');
-  const [authed,  setAuthed]     = React.useState(() => localStorage.getItem('sklm.authed')  !== 'false');
+  const [authed,  setAuthed]     = React.useState(() => localStorage.getItem('sklm.authed')  === 'true');
   const [tokensOpen, setTokensOpen] = React.useState(false);
   const [shortcutsOpen, setShortcutsOpen] = React.useState(false);
   const [fading, setFading] = React.useState(false);
