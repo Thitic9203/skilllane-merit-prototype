@@ -15,11 +15,11 @@ const LoginScreen = ({ onSignIn, theme }) => {
   const [error, setError] = React.useState(null);
 
   const ACCOUNTS = [
-    { email: 'thitichaya.c@skilllane.com', ok: true,  reason: null },
-    { email: 'somsak.c@skilllane.com',     ok: true,  reason: null },
-    { email: 'guest@gmail.com',            ok: false, reason: 'domain' },
-    { email: 'contractor@outlook.com',     ok: false, reason: 'domain' },
-    { email: 'deactivated@skilllane.com',  ok: false, reason: 'deactivated' },
+    { email: 'thitichaya.c@skilllane.com', ok: true,  reason: null,          role: 'Admin'  },
+    { email: 'somsak.c@skilllane.com',     ok: true,  reason: null,          role: 'Member' },
+    { email: 'guest@gmail.com',            ok: false, reason: 'domain',      role: null },
+    { email: 'contractor@outlook.com',     ok: false, reason: 'domain',      role: null },
+    { email: 'deactivated@skilllane.com',  ok: false, reason: 'deactivated', role: null },
   ];
 
   const attempt = (mail) => {
@@ -117,12 +117,32 @@ const LoginScreen = ({ onSignIn, theme }) => {
               flexShrink:0,
             }}/>
             <span className="num" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{a.email}</span>
-            <span className="t-caption muted">{a.ok ? 'authorized' : a.reason === 'deactivated' ? 'deactivated' : 'wrong domain'}</span>
+            <span className="t-caption muted">
+              {a.ok
+                ? <><strong style={{color:'var(--text)', fontWeight:600}}>{a.role}</strong> · authorized</>
+                : a.reason === 'deactivated' ? 'deactivated' : 'wrong domain'}
+            </span>
           </button>
         ))}
       </div>
 
-      <p className="t-caption muted" style={{marginTop:24, lineHeight:1.6}}>
+      <div style={{marginTop:24, padding:'12px 14px', borderRadius:10, background:'var(--surface-muted)', border:'1px solid var(--border-soft)'}}>
+        <div className="t-caption muted" style={{marginBottom:8, fontWeight:600}}>Reviewer shortcuts</div>
+        <div style={{display:'flex', flexDirection:'column', gap:5}}>
+          {[
+            ['V', 'Switch desktop ↔ mobile view'],
+            ['?', 'Show all keyboard shortcuts'],
+            [',', 'Open design tokens panel'],
+          ].map(([key, desc]) => (
+            <div key={key} style={{display:'flex', alignItems:'center', gap:8}}>
+              <kbd style={{fontFamily:'ui-monospace,monospace', fontSize:11, padding:'2px 7px', borderRadius:5, background:'var(--surface)', border:'1px solid var(--border)', color:'var(--text)', fontWeight:600, flexShrink:0}}>{key}</kbd>
+              <span className="t-caption muted">{desc}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p className="t-caption muted" style={{marginTop:16, lineHeight:1.6}}>
         Access is limited to active SkillLane employees. Managed under People Handbook §7.
       </p>
     </div>
@@ -183,10 +203,10 @@ const LoginScreenMobile = ({ onSignIn }) => {
   const [phase, setPhase] = React.useState('idle');
   const [error, setError] = React.useState(null);
   const ACCOUNTS = [
-    { email: 'thitichaya.c@skilllane.com', ok: true,  reason: null },
-    { email: 'somsak.c@skilllane.com',     ok: true,  reason: null },
-    { email: 'guest@gmail.com',            ok: false, reason: 'domain' },
-    { email: 'deactivated@skilllane.com',  ok: false, reason: 'deactivated' },
+    { email: 'thitichaya.c@skilllane.com', ok: true,  reason: null,          role: 'Admin'  },
+    { email: 'somsak.c@skilllane.com',     ok: true,  reason: null,          role: 'Member' },
+    { email: 'guest@gmail.com',            ok: false, reason: 'domain',      role: null },
+    { email: 'deactivated@skilllane.com',  ok: false, reason: 'deactivated', role: null },
   ];
   const attempt = (mail) => {
     setError(null); setPhase('loading');
@@ -251,8 +271,9 @@ const LoginScreenMobile = ({ onSignIn }) => {
             border:'1px solid rgba(255,255,255,0.1)',
             fontSize:12, color:'rgba(255,255,255,0.85)', textAlign:'left',
           }}>
-            <span style={{width:7, height:7, borderRadius:'50%', background: a.ok?'var(--success)':'var(--error)'}}/>
+            <span style={{width:7, height:7, borderRadius:'50%', background: a.ok?'var(--success)':'var(--error)', flexShrink:0}}/>
             <span className="num" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{a.email}</span>
+            {a.role && <span style={{fontSize:11, fontWeight:600, color:'var(--accent-gold)', flexShrink:0}}>{a.role}</span>}
           </button>
         ))}
       </div>
