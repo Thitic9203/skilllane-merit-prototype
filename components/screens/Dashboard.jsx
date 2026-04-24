@@ -24,7 +24,7 @@ const Dashboard = ({ data, setScreen, isMobile }) => {
       {/* Greeting */}
       <div style={{marginBottom: isMobile ? 20 : 32, display:'flex', alignItems:'end', justifyContent:'space-between', gap:16, flexWrap:'wrap'}}>
         <div>
-          <div className="t-label muted">{greeting()} · Sunday, Apr 19</div>
+          <div className="t-label muted">{greeting()} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}</div>
           <h1 className="t-h1" style={{margin:'6px 0 0'}}>{currentUser.name.split(' ')[0]}</h1>
         </div>
         <div style={{display:'flex', gap:10, alignItems:'center'}}>

@@ -1,4 +1,10 @@
 // Leaderboard screen — full rankings, monthly/total toggle, bar chart
+const currentQuarterLabel = () => {
+  const now = new Date();
+  const q = Math.ceil((now.getMonth() + 1) / 3);
+  return `Q${q} ${now.getFullYear()}`;
+};
+
 const LeaderboardScreen = ({ data, isMobile }) => {
   const { leaderboard, currentUser } = data;
   const [view, setView] = React.useState('monthly');
@@ -17,7 +23,7 @@ const LeaderboardScreen = ({ data, isMobile }) => {
       {/* Header */}
       <div style={{marginBottom: isMobile ? 20 : 32, display:'flex', alignItems:'flex-end', justifyContent:'space-between', gap:12, flexWrap:'wrap'}}>
         <div>
-          <div className="t-label muted">Rankings · Q2 2025</div>
+          <div className="t-label muted">Rankings · {currentQuarterLabel()}</div>
           <h1 className="t-h1" style={{margin:'6px 0 0'}}>Leaderboard</h1>
         </div>
         <div style={{display:'flex', gap:6, padding:4, background:'var(--surface-muted)', borderRadius:10, border:'1px solid var(--border-soft)'}}>

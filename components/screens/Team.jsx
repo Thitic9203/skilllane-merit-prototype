@@ -3,6 +3,11 @@ const TeamDashboard = ({ data, isMobile, setScreen }) => {
   const { teamDashboard } = data;
   const { headline, trend, categoryBreakdown, topPerformers } = teamDashboard;
   const [stateMode, setStateMode] = React.useState('normal');
+  const [deptFilter, setDeptFilter] = React.useState('All departments');
+
+  const filteredPerformers = deptFilter === 'All departments'
+    ? topPerformers
+    : topPerformers.filter(p => p.team && p.team.toLowerCase().includes(deptFilter.toLowerCase()));
 
   return (
     <div className="fade-in" style={{padding: isMobile?'20px 16px 32px':'40px 48px 80px', maxWidth: 1280, margin:'0 auto'}}>
@@ -13,7 +18,12 @@ const TeamDashboard = ({ data, isMobile, setScreen }) => {
         stateMode={stateMode} onStateModeChange={setStateMode}
         right={
           <div style={{display:'flex', gap:10}}>
-            <select className="input" style={{width:'auto', padding:'10px 12px', fontSize:13}}>
+            <select
+              className="input"
+              value={deptFilter}
+              onChange={e => setDeptFilter(e.target.value)}
+              style={{width:'auto', padding:'10px 12px', fontSize:13}}
+            >
               <option>All departments</option>
               <option>Engineering</option>
               <option>Design</option>
@@ -82,8 +92,12 @@ const TeamDashboard = ({ data, isMobile, setScreen }) => {
         <section className="card" style={{padding: isMobile?20:28}}>
           <SectionHeader title="Top performers — April"/>
           <div style={{display:'flex', flexDirection:'column', gap:2}}>
-            {topPerformers.map((p, i) => (
-              <div key={i} style={{display:'flex', alignItems:'center', gap:14, padding:'12px 4px', borderBottom: i < topPerformers.length-1 ? '1px solid var(--border-soft)' : 'none'}}>
+            {filteredPerformers.length === 0 ? (
+            <div style={{padding:'24px 0', textAlign:'center', color:'var(--text-subtle)', fontSize:13}}>
+              No performers in this department yet.
+            </div>
+          ) : filteredPerformers.map((p, i) => (
+              <div key={i} style={{display:'flex', alignItems:'center', gap:14, padding:'12px 4px', borderBottom: i < filteredPerformers.length-1 ? '1px solid var(--border-soft)' : 'none'}}>
                 <RankChip rank={i+1}/>
                 <Avatar initials={p.initials} size={36} tone="navy"/>
                 <div style={{flex:1, minWidth:0}}>

@@ -197,8 +197,8 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
           </Field>
 
           <Field label="Note" hint="Shared with recipient. Be specific — describe what, why, and its impact.">
-            <textarea value={note} onChange={e=>setNote(e.target.value)} rows={4} className="input" placeholder="Delivered the design system v3 launch on time, with exceptional attention to edge-case handling on dark mode…" style={{resize:'vertical', fontSize:14, lineHeight:1.55}}/>
-            <div className="t-caption muted" style={{marginTop:6, textAlign:'right'}} className="num">{note.length} / 500</div>
+            <textarea value={note} onChange={e=>setNote(e.target.value)} rows={4} maxLength={500} className="input" placeholder="Delivered the design system v3 launch on time, with exceptional attention to edge-case handling on dark mode…" style={{resize:'vertical', fontSize:14, lineHeight:1.55}}/>
+            <div className="t-caption muted num" style={{marginTop:6, textAlign:'right'}}>{note.length} / 500</div>
           </Field>
 
           <Field label="Visibility">

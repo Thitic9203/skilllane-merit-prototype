@@ -31,6 +31,7 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
             query={searchQuery}
             onClose={() => { setSearchOpen(false); setSearchQuery(''); }}
             setScreen={setScreen}
+            setQuery={setSearchQuery}
             isAdmin={data.currentUser.isAdmin}
           />
         }

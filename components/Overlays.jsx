@@ -88,6 +88,7 @@ const NotificationsPanel = ({ open, onClose, anchorRef, isMobile }) => {
   const data = window.MERIT_DATA;
   const [tab, setTab] = React.useState('all');
   const [mode, setMode] = React.useState('normal'); // normal | empty
+  const [allRead, setAllRead] = React.useState(false);
   const panelRef = React.useRef(null);
 
   React.useEffect(() => { if (open) setTab('all'); }, [open]);
@@ -107,8 +108,9 @@ const NotificationsPanel = ({ open, onClose, anchorRef, isMobile }) => {
   if (!open) return null;
 
   const all = data.notifications || [];
-  const unread = all.filter(n => n.unread);
-  const shown = mode === 'empty' ? [] : (tab === 'unread' ? unread : all);
+  const unread = (allRead || mode === 'empty') ? [] : all.filter(n => n.unread);
+  const shownRaw = mode === 'empty' ? [] : (tab === 'unread' ? unread : all);
+  const shown = allRead ? shownRaw.map(n => ({ ...n, unread: false })) : shownRaw;
   const today = shown.filter(n => n.group === 'today');
   const earlier = shown.filter(n => n.group !== 'today');
 
@@ -186,13 +188,15 @@ const NotificationsPanel = ({ open, onClose, anchorRef, isMobile }) => {
     <div style={{padding: '10px 16px', borderTop: '1px solid var(--border-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface-muted)'}}>
       <button
         disabled={unread.length === 0 || mode === 'empty'}
+        onClick={() => { setAllRead(true); setTab('all'); }}
         style={{fontSize: 12.5, fontWeight: 500, padding: '6px 8px', borderRadius: 6,
           color: (unread.length === 0 || mode === 'empty') ? 'var(--text-subtle)' : 'var(--text)',
           cursor: (unread.length === 0 || mode === 'empty') ? 'not-allowed' : 'pointer'}}
       >Mark all as read</button>
-      <button style={{fontSize: 12.5, fontWeight: 600, color: 'var(--accent-gold)', padding: '6px 8px', borderRadius: 6}}>
-        Open inbox →
-      </button>
+      <button
+        onClick={onClose}
+        style={{fontSize: 12.5, fontWeight: 600, color: 'var(--accent-gold)', padding: '6px 8px', borderRadius: 6}}
+      >Open inbox →</button>
     </div>
   );
 
@@ -274,9 +278,12 @@ const SearchResultRow = ({ icon, primary, secondary, meta, rightIcon, onClick })
   </button>
 );
 
-const SearchPopover = ({ open, query, onClose, setScreen, isAdmin }) => {
-  if (!open) return null;
+const SearchPopover = ({ open, query, onClose, setScreen, setQuery, isAdmin }) => {
   const data = window.MERIT_DATA;
+  const [recentSearches, setRecentSearches] = React.useState(
+    () => (data.searchSuggestions?.recent || [])
+  );
+  if (!open) return null;
   const q = query.trim().toLowerCase();
 
   const people = q ? data.leaderboard.filter(p => p.name.toLowerCase().includes(q) || p.team.toLowerCase().includes(q)).slice(0, 4) : [];
@@ -318,14 +325,18 @@ const SearchPopover = ({ open, query, onClose, setScreen, isAdmin }) => {
           <div style={{height: 1, background: 'var(--border-soft)', margin: '4px 14px'}}/>
           <div style={{padding: '12px 14px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <div className="t-label muted">Recent searches</div>
-            <button style={{fontSize: 11.5, fontWeight: 500, color: 'var(--text-subtle)', padding: 2, borderRadius: 4}}>Clear</button>
+            <button
+              onClick={() => setRecentSearches([])}
+              style={{fontSize: 11.5, fontWeight: 500, color: 'var(--text-subtle)', padding: 2, borderRadius: 4}}
+            >Clear</button>
           </div>
           <div style={{padding: '0 6px 10px'}}>
-            {(data.searchSuggestions?.recent || []).map((r, i) => (
+            {recentSearches.map((r, i) => (
               <SearchResultRow key={i}
                 icon={<Icon name="history" size={15}/>}
                 primary={r}
-                rightIcon={<span style={{fontSize: 10.5, fontWeight: 500, color: 'var(--text-subtle)'}}>↵</span>}/>
+                rightIcon={<span style={{fontSize: 10.5, fontWeight: 500, color: 'var(--text-subtle)'}}>↵</span>}
+                onClick={() => { if (setQuery) setQuery(r); }}/>
             ))}
           </div>
           <div style={{padding: '10px 14px', borderTop: '1px solid var(--border-soft)', background: 'var(--surface-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, color: 'var(--text-subtle)'}}>
@@ -402,7 +413,7 @@ const SearchPopover = ({ open, query, onClose, setScreen, isAdmin }) => {
           )}
           <div style={{padding: '10px 14px', borderTop: '1px solid var(--border-soft)', background: 'var(--surface-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, color: 'var(--text-subtle)'}}>
             <span>{people.length + rewards.length + activity.length} results for <span style={{color: 'var(--text)', fontWeight: 500}}>"{query}"</span></span>
-            <button style={{fontSize: 12, fontWeight: 600, color: 'var(--accent-gold)', padding: '2px 6px', borderRadius: 4}}>See all →</button>
+            <button onClick={() => go('history')} style={{fontSize: 12, fontWeight: 600, color: 'var(--accent-gold)', padding: '2px 6px', borderRadius: 4}}>See all →</button>
           </div>
         </>
       )}
