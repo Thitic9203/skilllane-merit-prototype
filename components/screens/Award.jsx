@@ -178,8 +178,8 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
           </Field>
 
           <Field label="Amount per person">
-            <div style={{display:'flex', gap:10, alignItems:'center'}}>
-              <div style={{display:'flex', gap:6}}>
+            <div style={{display:'flex', gap:10, alignItems:'center', flexWrap:'wrap'}}>
+              <div style={{display:'flex', gap:6, flexWrap:'wrap'}}>
                 {[25, 50, 100, 200, 500].map(v => (
                   <button key={v} onClick={()=>setAmount(v)} style={{
                     padding:'8px 14px', borderRadius:8, fontSize:13, fontWeight:600,
@@ -197,7 +197,7 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
           </Field>
 
           <Field label="Note" hint="Shared with recipient. Be specific — describe what, why, and its impact.">
-            <textarea value={note} onChange={e=>setNote(e.target.value)} rows={4} maxLength={500} className="input" placeholder="Delivered the design system v3 launch on time, with exceptional attention to edge-case handling on dark mode…" style={{resize:'vertical', fontSize:14, lineHeight:1.55}}/>
+            <textarea value={note} onChange={e=>setNote(e.target.value)} rows={4} maxLength={500} className="input" placeholder="Describe what they did and why it mattered…" style={{resize:'vertical', fontSize:14, lineHeight:1.55}}/>
             <div className="t-caption muted num" style={{marginTop:6, textAlign:'right'}}>{note.length} / 500</div>
           </Field>
 

@@ -74,14 +74,14 @@ const FeedScreen = ({ data, isMobile }) => {
             <textarea
               value={draft}
               onChange={e=>setDraft(e.target.value)}
-              placeholder="Describe what they did. Be specific — recognition lands when it's concrete."
+              placeholder="Be specific — recognition lands when it's concrete."
               rows={3}
               className="input"
               style={{resize:'vertical', minHeight:80, fontSize:14, lineHeight:1.55}}
             />
             {!draft.trim() && (
               <div className="t-caption muted" style={{marginTop:6, fontSize:12}}>
-                Tag a specific action or outcome — "unblocked the release by catching the edge case" lands better than "great work."
+                Tag a specific action or outcome — concrete beats vague every time.
               </div>
             )}
             {draft.trim().length > 0 && draft.trim().length < 10 && (

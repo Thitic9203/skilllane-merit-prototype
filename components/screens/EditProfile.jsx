@@ -56,7 +56,7 @@ const EditProfileScreen = ({ data, setScreen, isMobile }) => {
         onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
         onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
       >
-        <Icon name="chevron-left" size={14}/> Back to profile
+        <Icon name="arrow-right" size={14} style={{transform:'rotate(180deg)'}}/> Back to profile
       </button>
 
       <h1 style={{ fontSize: isMobile ? 24 : 28, fontWeight: 600, letterSpacing: '-0.02em', margin: '0 0 4px' }}>Edit profile</h1>
