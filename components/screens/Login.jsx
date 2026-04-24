@@ -50,7 +50,7 @@ const LoginScreen = ({ onSignIn, theme }) => {
   const formPanel = (
     <div style={{width:'100%', maxWidth: 400}}>
       <div className="t-label muted" style={{marginBottom:12}}>Sign in</div>
-      <h2 className="t-h1" style={{margin:'0 0 8px'}}>Sign in to SkillLane Merit.</h2>
+      <h2 className="t-h1" style={{margin:'0 0 8px'}}>Sign in to SkillLane Merit</h2>
       <p className="t-body muted" style={{margin:'0 0 28px'}}>
         SkillLane Merit is restricted to <strong style={{color:'var(--text)'}}>@skilllane.com</strong> accounts.
       </p>
