@@ -127,12 +127,12 @@ const LoginScreen = ({ onSignIn, theme }) => {
       </div>
 
       <div style={{marginTop:24, padding:'12px 14px', borderRadius:10, background:'var(--surface-muted)', border:'1px solid var(--border-soft)'}}>
-        <div className="t-caption muted" style={{marginBottom:8, fontWeight:600}}>Reviewer shortcuts</div>
+        <div className="t-caption muted" style={{marginBottom:8, fontWeight:600}}>Prototype shortcuts</div>
         <div style={{display:'flex', flexDirection:'column', gap:5}}>
           {[
-            ['V', 'Switch desktop ↔ mobile view'],
-            ['?', 'Show all keyboard shortcuts'],
-            [',', 'Open design tokens panel'],
+            ['V', 'Toggle desktop / mobile view'],
+            ['?', 'View all shortcuts'],
+            [',', 'Open design tokens'],
           ].map(([key, desc]) => (
             <div key={key} style={{display:'flex', alignItems:'center', gap:8}}>
               <kbd style={{fontFamily:'ui-monospace,monospace', fontSize:11, padding:'2px 7px', borderRadius:5, background:'var(--surface)', border:'1px solid var(--border)', color:'var(--text)', fontWeight:600, flexShrink:0}}>{key}</kbd>
@@ -143,7 +143,7 @@ const LoginScreen = ({ onSignIn, theme }) => {
       </div>
 
       <p className="t-caption muted" style={{marginTop:16, lineHeight:1.6}}>
-        Access is limited to active SkillLane employees. Managed under People Handbook §7.
+        Internal only · People Handbook §7
       </p>
     </div>
   );
