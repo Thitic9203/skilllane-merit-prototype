@@ -206,6 +206,7 @@ const LoginScreenMobile = ({ onSignIn }) => {
     { email: 'thitichaya.c@skilllane.com', ok: true,  reason: null,          role: 'Admin'  },
     { email: 'somsak.c@skilllane.com',     ok: true,  reason: null,          role: 'Member' },
     { email: 'guest@gmail.com',            ok: false, reason: 'domain',      role: null },
+    { email: 'contractor@outlook.com',     ok: false, reason: 'domain',      role: null },
     { email: 'deactivated@skilllane.com',  ok: false, reason: 'deactivated', role: null },
   ];
   const attempt = (mail) => {
@@ -269,14 +270,36 @@ const LoginScreenMobile = ({ onSignIn }) => {
             padding:'9px 12px', borderRadius:8,
             background:'rgba(255,255,255,0.06)',
             border:'1px solid rgba(255,255,255,0.1)',
-            fontSize:12, color:'rgba(255,255,255,0.85)', textAlign:'left',
+            fontSize:12, color: a.ok ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.45)', textAlign:'left',
           }}>
             <span style={{width:7, height:7, borderRadius:'50%', background: a.ok?'var(--success)':'var(--error)', flexShrink:0}}/>
             <span className="num" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{a.email}</span>
-            {a.role && <span style={{fontSize:11, fontWeight:600, color:'var(--accent-gold)', flexShrink:0}}>{a.role}</span>}
+            <span style={{fontSize:11, flexShrink:0, fontWeight:600, color: a.ok ? 'var(--accent-gold)' : 'rgba(255,255,255,0.35)'}}>
+              {a.ok ? a.role : a.reason === 'deactivated' ? 'deactivated' : 'wrong domain'}
+            </span>
           </button>
         ))}
       </div>
+
+      <div style={{marginTop:16, padding:'12px 14px', borderRadius:10, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)'}}>
+        <div style={{fontSize:11, fontWeight:600, color:'rgba(255,255,255,0.45)', marginBottom:8, letterSpacing:'0.04em', textTransform:'uppercase'}}>Prototype shortcuts</div>
+        <div style={{display:'flex', flexDirection:'column', gap:5}}>
+          {[
+            ['V', 'Toggle desktop / mobile view'],
+            ['?', 'View all shortcuts'],
+            [',', 'Open design tokens'],
+          ].map(([key, desc]) => (
+            <div key={key} style={{display:'flex', alignItems:'center', gap:8}}>
+              <kbd style={{fontFamily:'ui-monospace,monospace', fontSize:11, padding:'2px 7px', borderRadius:5, background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)', color:'rgba(255,255,255,0.8)', fontWeight:600, flexShrink:0}}>{key}</kbd>
+              <span style={{fontSize:12, color:'rgba(255,255,255,0.5)'}}>{desc}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p style={{marginTop:14, fontSize:11, color:'rgba(255,255,255,0.3)', lineHeight:1.6}}>
+        Internal only · People Handbook §7
+      </p>
     </div>
   );
 };
