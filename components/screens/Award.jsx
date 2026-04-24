@@ -76,7 +76,7 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
       toast.success(
         `${total.toLocaleString()} points awarded`,
         `Sent to ${names}. They have been notified.`,
-        { action: { label: 'View team', onClick: () => setScreen('team') } }
+        { action: { label: 'View team', onClick: () => setScreen('reports') } }
       );
     }, 500);
   };
@@ -109,7 +109,7 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
           </p>
           <div style={{display:'flex', gap:10, justifyContent:'center'}}>
             <button className="btn btn-ghost" onClick={() => { setConfirmed(false); setNote(''); setRecipients([]); setAmount(100); }}>Award more</button>
-            <button className="btn btn-primary" onClick={() => setScreen('team')}>Go to team dashboard <Icon name="arrow-right" size={14}/></button>
+            <button className="btn btn-primary" onClick={() => setScreen('reports')}>Go to team dashboard <Icon name="arrow-right" size={14}/></button>
           </div>
         </div>
       </div>

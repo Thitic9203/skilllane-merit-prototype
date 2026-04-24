@@ -1,7 +1,7 @@
 // Main App
 const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'feed', 'profile', 'editprofile', 'approve', 'reports'];
 
-const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, bellRef, searchWrapperRef, searchQuery, setSearchQuery, searchOpen, setSearchOpen }) => {
+const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, bellRef, searchWrapperRef, searchQuery, setSearchQuery, searchOpen, setSearchOpen, notiAllRead, onMarkAllRead }) => {
   const screenMap = {
     dashboard:   <Dashboard         data={data} setScreen={setScreen} isMobile={false}/>,
     history:     <HistoryScreen     data={data} isMobile={false}/>,
@@ -13,7 +13,7 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
     approve:     <AwardScreen       data={data} setScreen={setScreen} isMobile={false}/>,
     reports:     <TeamDashboard     data={data} setScreen={setScreen} isMobile={false}/>,
   };
-  const unreadCount = (data.notifications || []).filter(n => n.unread).length;
+  const unreadCount = notiAllRead ? 0 : (data.notifications || []).filter(n => n.unread).length;
   return (
     <div style={{minHeight:'100%', display:'flex', flexDirection:'column', background:'var(--bg)', color:'var(--text)'}}>
       <TopNav
@@ -42,12 +42,12 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
           {screenMap[screen]}
         </main>
       </div>
-      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} anchorRef={bellRef} isMobile={false}/>
+      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} anchorRef={bellRef} isMobile={false} allRead={notiAllRead} onMarkAllRead={onMarkAllRead}/>
     </div>
   );
 };
 
-const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, menuOpen, setMenuOpen, drawerScope = 'viewport' }) => {
+const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, menuOpen, setMenuOpen, drawerScope = 'viewport', notiAllRead, onMarkAllRead }) => {
   const screenMap = {
     dashboard:   <Dashboard      data={data} setScreen={setScreen} isMobile={true}/>,
     history:     <HistoryScreen  data={data} isMobile={true}/>,
@@ -59,7 +59,7 @@ const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, noti
     approve:     <AwardScreen       data={data} setScreen={setScreen} isMobile={true}/>,
     reports:     <TeamDashboard     data={data} setScreen={setScreen} isMobile={true}/>,
   };
-  const unreadCount = (data.notifications || []).filter(n => n.unread).length;
+  const unreadCount = notiAllRead ? 0 : (data.notifications || []).filter(n => n.unread).length;
   return (
     <div style={{minHeight:'100%', display:'flex', flexDirection:'column', background:'var(--bg)', color:'var(--text)', position:'relative'}}>
       <TopNav
@@ -76,7 +76,7 @@ const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, noti
       <MobileTabs screen={screen} setScreen={setScreen} isAdmin={data.currentUser.isAdmin}/>
 
       {/* Overlays render inside the mobile shell so they clip to the phone frame */}
-      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} isMobile={true}/>
+      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} isMobile={true} allRead={notiAllRead} onMarkAllRead={onMarkAllRead}/>
       <MobileMenuDrawer
         open={menuOpen} onClose={() => setMenuOpen(false)}
         screen={screen} setScreen={setScreen} isAdmin={data.currentUser.isAdmin}
@@ -162,6 +162,7 @@ const App = () => {
 
   // Overlay state — notifications panel, search popover, mobile menu drawer
   const [notifOpen, setNotifOpen] = React.useState(false);
+  const [notiAllRead, setNotiAllRead] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -288,6 +289,7 @@ const App = () => {
             searchWrapperRef={searchWrapperRef}
             searchQuery={searchQuery} setSearchQuery={setSearchQuery}
             searchOpen={searchOpen} setSearchOpen={setSearchOpen}
+            notiAllRead={notiAllRead} onMarkAllRead={() => setNotiAllRead(true)}
           />
         </div>
       ) : renderAsRealMobile ? (
@@ -299,6 +301,7 @@ const App = () => {
             notifOpen={notifOpen} setNotifOpen={setNotifOpen}
             menuOpen={menuOpen} setMenuOpen={setMenuOpen}
             drawerScope="viewport"
+            notiAllRead={notiAllRead} onMarkAllRead={() => setNotiAllRead(true)}
           />
         </div>
       ) : (
@@ -318,6 +321,7 @@ const App = () => {
               notifOpen={notifOpen} setNotifOpen={setNotifOpen}
               menuOpen={menuOpen} setMenuOpen={setMenuOpen}
               drawerScope="frame"
+              notiAllRead={notiAllRead} onMarkAllRead={() => setNotiAllRead(true)}
             />
           </MobileFrame>
         </div>

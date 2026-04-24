@@ -55,7 +55,7 @@ const Dashboard = ({ data, setScreen, isMobile }) => {
             label="This year"
             value={currentUser.balance.toLocaleString()}
             suffix="points"
-            hint="2025 total"
+            hint={`${new Date().getFullYear()} total`}
           />
           <QuickStat
             label="Current rank"
@@ -133,6 +133,19 @@ const Dashboard = ({ data, setScreen, isMobile }) => {
   );
 };
 
+const quarterLabel = () => {
+  const now = new Date();
+  return `Q${Math.ceil((now.getMonth() + 1) / 3)} ${now.getFullYear()}`;
+};
+
+const quarterEndDate = () => {
+  const now = new Date();
+  const q = Math.ceil((now.getMonth() + 1) / 3);
+  const ends = [new Date(now.getFullYear(), 2, 31), new Date(now.getFullYear(), 5, 30),
+                new Date(now.getFullYear(), 8, 30), new Date(now.getFullYear(), 11, 31)];
+  return ends[q - 1].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
+
 const greeting = () => {
   const h = new Date().getHours();
   if (h < 12) return 'Good morning';
@@ -161,7 +174,7 @@ const MembershipCard = ({ user, isMobile }) => (
     <div style={{display:'flex', justifyContent:'space-between', position:'relative'}}>
       <div className="t-label" style={{color:'rgba(255,255,255,0.5)'}}>Your balance</div>
       <div style={{display:'flex', alignItems:'center', gap:6, padding:'4px 10px', borderRadius:999, background:'rgba(200,169,110,0.12)', color:'var(--accent-gold)', fontSize:11, fontWeight:500, letterSpacing:'0.05em', textTransform:'uppercase'}}>
-        <span style={{width:5, height:5, borderRadius:'50%', background:'var(--accent-gold)'}}/> Active · Q2 2026
+        <span style={{width:5, height:5, borderRadius:'50%', background:'var(--accent-gold)'}}/> Active · {quarterLabel()}
       </div>
     </div>
     <div className="num t-display" style={{color:'var(--accent-gold)', marginTop:isMobile?14:20, position:'relative'}}>
@@ -170,7 +183,7 @@ const MembershipCard = ({ user, isMobile }) => (
     <div style={{display:'flex', alignItems:'center', gap:8, marginTop:8, position:'relative'}}>
       <span className="t-body-sm" style={{color:'rgba(255,255,255,0.7)'}}>Merit points · redeemable</span>
       <span style={{width:3, height:3, borderRadius:'50%', background:'rgba(255,255,255,0.3)'}}/>
-      <span className="t-body-sm" style={{color:'rgba(255,255,255,0.7)'}}>Expires Jun 30</span>
+      <span className="t-body-sm" style={{color:'rgba(255,255,255,0.7)'}}>Expires {quarterEndDate()}</span>
     </div>
     <div style={{marginTop: isMobile?18:28, paddingTop: isMobile?18:24, borderTop:'1px solid rgba(255,255,255,0.08)', display:'flex', alignItems:'center', justifyContent:'space-between', position:'relative'}}>
       <div style={{display:'flex', alignItems:'center', gap:12}}>

@@ -84,11 +84,10 @@ const NotificationRow = ({ n, onClick }) => (
   </button>
 );
 
-const NotificationsPanel = ({ open, onClose, anchorRef, isMobile }) => {
+const NotificationsPanel = ({ open, onClose, anchorRef, isMobile, allRead = false, onMarkAllRead }) => {
   const data = window.MERIT_DATA;
   const [tab, setTab] = React.useState('all');
   const [mode, setMode] = React.useState('normal'); // normal | empty
-  const [allRead, setAllRead] = React.useState(false);
   const panelRef = React.useRef(null);
 
   React.useEffect(() => { if (open) setTab('all'); }, [open]);
@@ -188,7 +187,7 @@ const NotificationsPanel = ({ open, onClose, anchorRef, isMobile }) => {
     <div style={{padding: '10px 16px', borderTop: '1px solid var(--border-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface-muted)'}}>
       <button
         disabled={unread.length === 0 || mode === 'empty'}
-        onClick={() => { setAllRead(true); setTab('all'); }}
+        onClick={() => { if (onMarkAllRead) onMarkAllRead(); setTab('all'); }}
         style={{fontSize: 12.5, fontWeight: 500, padding: '6px 8px', borderRadius: 6,
           color: (unread.length === 0 || mode === 'empty') ? 'var(--text-subtle)' : 'var(--text)',
           cursor: (unread.length === 0 || mode === 'empty') ? 'not-allowed' : 'pointer'}}

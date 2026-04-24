@@ -14,7 +14,7 @@ const TeamDashboard = ({ data, isMobile, setScreen }) => {
       <ScreenHeader
         eyebrow={<span style={{display:'inline-flex', alignItems:'center', gap:6}}><Icon name="shield" size={12}/> Manager view</span>}
         title="Team dashboard"
-        desc="April 2026 · Updated 4 min ago"
+        desc={`${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} · Updated just now`}
         stateMode={stateMode} onStateModeChange={setStateMode}
         right={
           <div style={{display:'flex', gap:10}}>
