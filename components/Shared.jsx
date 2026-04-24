@@ -85,7 +85,9 @@ const ThemeToggle = ({ theme, onToggle }) => (
 );
 
 // Top navigation — navy in both modes
-const TopNav = ({ currentUser, onAvatarClick, theme, onThemeToggle, isMobile, onOpenNotifications, onOpenMobileMenu, bellRef, searchWrapperRef, searchQuery, onSearchQuery, onSearchFocus, notifUnread, searchChildren }) => (
+const TopNav = ({ currentUser, onAvatarClick, theme, onThemeToggle, isMobile, onOpenNotifications, onOpenMobileMenu, bellRef, searchWrapperRef, searchQuery, onSearchQuery, onSearchFocus, notifUnread, searchChildren, screen }) => {
+  const onProfile = screen === 'profile';
+  return (
   <header style={{
     background: 'var(--nav-navy)',
     color: '#fff',
@@ -136,7 +138,10 @@ const TopNav = ({ currentUser, onAvatarClick, theme, onThemeToggle, isMobile, on
       )}
     </button>
     {!isMobile && <ThemeToggle theme={theme} onToggle={onThemeToggle}/>}
-    <button onClick={onAvatarClick} style={{display:'flex', alignItems:'center', gap:10, padding:4, borderRadius:999}}>
+    <button
+      onClick={onProfile ? undefined : onAvatarClick}
+      style={{display:'flex', alignItems:'center', gap:10, padding:4, borderRadius:999, cursor: onProfile ? 'default' : 'pointer'}}
+    >
       <Avatar initials={currentUser.avatarInitials} tone="gold" size={36}/>
       {!isMobile && (
         <div style={{textAlign:'left', paddingRight:8}}>
@@ -146,7 +151,8 @@ const TopNav = ({ currentUser, onAvatarClick, theme, onThemeToggle, isMobile, on
       )}
     </button>
   </header>
-);
+  );
+};
 
 // Brand mark — award medallion (recognition/merit icon, non-typographic)
 const Brand = ({ compact }) => (

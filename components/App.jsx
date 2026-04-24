@@ -25,6 +25,7 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
         searchQuery={searchQuery} onSearchQuery={setSearchQuery}
         onSearchFocus={() => setSearchOpen(true)}
         notifUnread={unreadCount}
+        screen={screen}
         searchChildren={
           <SearchPopover
             open={searchOpen}
@@ -69,6 +70,7 @@ const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, noti
         onOpenNotifications={() => setNotifOpen(true)}
         onOpenMobileMenu={() => setMenuOpen(true)}
         notifUnread={unreadCount}
+        screen={screen}
       />
       <main key={screen} style={{flex:1, minWidth:0, overflow:'auto'}}>
         {screenMap[screen]}
