@@ -43,7 +43,7 @@ const FeedScreen = ({ data, isMobile }) => {
   return (
     <div className="fade-in" style={{padding: isMobile?'20px 16px 32px':'40px 48px 80px', maxWidth: 900, margin:'0 auto'}}>
       <ScreenHeader
-        eyebrow="Community" title="Recognition"
+        eyebrow="Peer-to-peer" title="Recognition"
         desc="See how colleagues are acknowledging one another. Send your own — small recognitions compound."
         searchValue={search} onSearch={setSearch} searchPlaceholder="Search recognitions by name or keyword…"
         stateMode={stateMode} onStateModeChange={setStateMode}

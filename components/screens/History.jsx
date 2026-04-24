@@ -53,7 +53,7 @@ const HistoryScreen = ({ data, isMobile }) => {
   return (
     <div className="fade-in" style={{padding: isMobile?'20px 16px 32px':'40px 48px 80px', maxWidth: 1280, margin:'0 auto'}}>
       <ScreenHeader
-        eyebrow="Ledger" title="Points history"
+        eyebrow="Activity" title="Points history"
         desc="Every merit transaction on your account, filterable by category and direction."
         searchValue={search} onSearch={setSearch} searchPlaceholder="Search by description, sender, or category…"
         stateMode={stateMode} onStateModeChange={setStateMode}

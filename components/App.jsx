@@ -155,7 +155,7 @@ const App = () => {
   const toast = useToast();
   const vpAuto = useViewportAuto();
   const [screen,  setScreenRaw]  = React.useState(() => localStorage.getItem('sklm.screen')  || 'dashboard');
-  const [theme,   setThemeRaw]   = React.useState(() => localStorage.getItem('sklm.theme')   || 'light');
+  const [theme,   setThemeRaw]   = React.useState(() => localStorage.getItem('sklm.theme')   || 'dark');
   const [vpPref,  setVpRaw]      = React.useState(() => localStorage.getItem('sklm.vp')      || 'auto');
   const [authed,  setAuthed]     = React.useState(() => sessionStorage.getItem('sklm.authed') === 'true');
   const [tokensOpen, setTokensOpen] = React.useState(false);

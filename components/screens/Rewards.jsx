@@ -33,7 +33,7 @@ const RewardsScreen = ({ data, isMobile }) => {
   return (
     <div className="fade-in" style={{padding: isMobile?'20px 16px 32px':'40px 48px 80px', maxWidth: 1280, margin:'0 auto'}}>
       <ScreenHeader
-        eyebrow="Catalog" title="Rewards"
+        eyebrow="Spend merit" title="Rewards"
         desc="Spend earned merit on things that matter. Orders are fulfilled by People Ops within 3 business days."
         right={
           <div className="card" style={{padding:'14px 20px', display:'flex', alignItems:'center', gap:14}}>
