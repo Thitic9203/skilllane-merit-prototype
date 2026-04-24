@@ -96,3 +96,31 @@ Interactive features currently wired up: notification bell + panel, ⌘K search 
 - "Edit profile" and some secondary actions may be no-ops — this is a prototype, not a working app.
 - All data is mocked in `data/mockdata.js`. No backend, no auth, no persistence.
 - In-browser Babel adds ~1–2s first-load cost. Acceptable for a demo; do not use this pattern in production.
+
+## QA log
+
+### R2b — 2026-04-24
+
+**aria-label check (Profile screen)**
+
+| Selector | Expected | Actual | Result |
+|---|---|---|---|
+| `[aria-label*="year over year"]` | `"Moved up 2 places year over year"` | `"Moved up 2 places year over year"` | PASS |
+
+**9-screen smoke test**
+
+| # | Screen | Renders | Heading | Bell | Search | Console errors |
+|---|---|---|---|---|---|---|
+| 1 | Dashboard | ✅ | Thitichaya | ✅ | ✅ | 0 |
+| 2 | My Activities | ✅ | Points history | ✅ | ✅ | 0 |
+| 3 | Leaderboard | ✅ | Leaderboard | ✅ | ✅ | 0 |
+| 4 | Rewards | ✅ | Rewards | ✅ | ✅ | 0 |
+| 5 | Recognition | ✅ | Recognition | ✅ | ✅ | 0 |
+| 6 | My Profile | ✅ | Thitichaya Chaiyaporn | ✅ | ✅ | 0 |
+| 7 | Approvals | ✅ | Award points | ✅ | ✅ | 0 |
+| 8 | Reports | ✅ | Team dashboard | ✅ | ✅ | 0 |
+| 9 | Notifications panel (bell click) | ✅ | Notifications | ✅ | ✅ | 0 |
+
+Known gaps (not counted as failures): Dashboard has no YoY rank UI; Toast title+body concat missing space.
+
+**Verdict: 🟢 PASS** — all 9 screens render, bell opens Notifications panel, search focusable, 0 console errors.
