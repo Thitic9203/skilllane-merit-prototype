@@ -197,7 +197,7 @@ const Sidebar = ({ screen, setScreen, isAdmin }) => {
     const active = screen === it.id;
     return (
       <button
-        onClick={() => setScreen(it.id)}
+        onClick={active ? undefined : () => setScreen(it.id)}
         style={{
           display: 'flex', alignItems: 'center', gap: 12,
           width: '100%', padding: '11px 14px',
@@ -207,6 +207,7 @@ const Sidebar = ({ screen, setScreen, isAdmin }) => {
           boxShadow: active ? 'var(--shadow-card)' : 'none',
           transition: 'all 200ms ease-out',
           position: 'relative',
+          cursor: active ? 'default' : 'pointer',
         }}
         onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = 'var(--text)'; }}
         onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = 'var(--text-muted)'; }}
@@ -271,11 +272,12 @@ const MobileTabs = ({ screen, setScreen, isAdmin }) => {
       {items.map(it => {
         const active = screen === it.id;
         return (
-          <button key={it.id} onClick={() => setScreen(it.id)} style={{
+          <button key={it.id} onClick={active ? undefined : () => setScreen(it.id)} style={{
             display:'flex', flexDirection:'column', alignItems:'center', gap:4,
             padding:'10px 4px', fontSize:10.5, fontWeight:500,
             color: active ? 'var(--text)' : 'var(--text-subtle)',
             position:'relative',
+            cursor: active ? 'default' : 'pointer',
           }}>
             {active && <div style={{position:'absolute', top:0, left:'30%', right:'30%', height:2, background:'var(--accent-gold)', borderRadius:'0 0 2px 2px'}}/>}
             <Icon name={it.icon} size={20}/>
