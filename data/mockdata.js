@@ -1,4 +1,52 @@
 // Mock data for SkillLane Merit prototype
+
+// User registry — keyed by authorized email
+window.MERIT_USERS = {
+  'thitichaya.c@skilllane.com': {
+    id: 'u1',
+    name: 'Thitichaya Chaiyaporn',
+    firstName: 'Thitichaya',
+    role: 'Team Lead QA Engineer',
+    team: 'Quality Engineering',
+    email: 'thitichaya.c@skilllane.com',
+    balance: 4820,
+    lifetime: 18340,
+    rank: 7,
+    rankDeltaYoY: 2,
+    avatarInitials: 'TC',
+    avatarTone: 'gold',
+    joined: 'March 2023',
+    isAdmin: true,
+    badges: [
+      { id: 'b1', name: 'Five-Year Mark',  earned: 'Mar 2028', kind: 'tenure' },
+      { id: 'b2', name: 'Mentor',          earned: 'Nov 2025', kind: 'peer' },
+      { id: 'b3', name: 'Launch Captain',  earned: 'Aug 2025', kind: 'milestone' },
+      { id: 'b4', name: 'Top 10 — Q1',    earned: 'Apr 2026', kind: 'quarter' },
+    ],
+  },
+  'somsak.c@skilllane.com': {
+    id: 'u4',
+    name: 'Somsak Chan',
+    firstName: 'Somsak',
+    role: 'Senior Software Engineer',
+    team: 'Engineering',
+    email: 'somsak.c@skilllane.com',
+    balance: 5640,
+    lifetime: 22180,
+    rank: 4,
+    rankDeltaYoY: 1,
+    avatarInitials: 'SC',
+    avatarTone: 'navy',
+    joined: 'January 2021',
+    isAdmin: false,
+    badges: [
+      { id: 'b5', name: 'Four-Year Mark',  earned: 'Jan 2025', kind: 'tenure' },
+      { id: 'b6', name: 'Incident Shield', earned: 'Sep 2025', kind: 'milestone' },
+      { id: 'b7', name: 'Top 10 — Q1',    earned: 'Apr 2026', kind: 'quarter' },
+    ],
+  },
+};
+
 window.MERIT_DATA = {
   currentUser: {
     id: 'u1',
