@@ -1,17 +1,18 @@
 // Main App
-const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'feed', 'profile', 'editprofile', 'approve', 'reports'];
+const SCREENS = ['dashboard', 'history', 'rewards', 'leaderboard', 'feed', 'profile', 'editprofile', 'approve', 'reports', 'settings'];
 
-const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, bellRef, searchWrapperRef, searchQuery, setSearchQuery, searchOpen, setSearchOpen, notiAllRead, onMarkAllRead }) => {
+const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, bellRef, searchWrapperRef, searchQuery, setSearchQuery, searchOpen, setSearchOpen, notiAllRead, onMarkAllRead, config, handleConfigChange }) => {
   const screenMap = {
     dashboard:   <Dashboard         data={data} setScreen={setScreen} isMobile={false}/>,
-    history:     <HistoryScreen     data={data} isMobile={false}/>,
+    history:     <HistoryScreen     data={data} config={config} handleConfigChange={handleConfigChange} isMobile={false}/>,
     rewards:     <RewardsScreen     data={data} isMobile={false}/>,
     leaderboard: <LeaderboardScreen data={data} isMobile={false}/>,
-    feed:        <FeedScreen        data={data} isMobile={false}/>,
+    feed:        <FeedScreen        data={data} config={config} handleConfigChange={handleConfigChange} isMobile={false}/>,
     profile:     <ProfileScreen     data={data} setScreen={setScreen} isMobile={false}/>,
     editprofile: <EditProfileScreen data={data} setScreen={setScreen} isMobile={false}/>,
-    approve:     <AwardScreen       data={data} setScreen={setScreen} isMobile={false}/>,
+    approve:     <AwardScreen       data={data} config={config} setScreen={setScreen} isMobile={false}/>,
     reports:     <TeamDashboard     data={data} setScreen={setScreen} isMobile={false}/>,
+    settings:    <SettingsScreen    config={config} handleConfigChange={handleConfigChange} isMobile={false}/>,
   };
   const unreadCount = notiAllRead ? 0 : (data.notifications || []).filter(n => n.unread).length;
   return (
@@ -48,17 +49,18 @@ const DesktopShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, not
   );
 };
 
-const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, menuOpen, setMenuOpen, drawerScope = 'viewport', notiAllRead, onMarkAllRead }) => {
+const MobileShell = ({ data, screen, setScreen, theme, setTheme, onSignOut, notifOpen, setNotifOpen, menuOpen, setMenuOpen, drawerScope = 'viewport', notiAllRead, onMarkAllRead, config, handleConfigChange }) => {
   const screenMap = {
     dashboard:   <Dashboard      data={data} setScreen={setScreen} isMobile={true}/>,
-    history:     <HistoryScreen  data={data} isMobile={true}/>,
+    history:     <HistoryScreen  data={data} config={config} handleConfigChange={handleConfigChange} isMobile={true}/>,
     rewards:     <RewardsScreen  data={data} isMobile={true}/>,
     leaderboard: <LeaderboardScreen data={data} isMobile={true}/>,
-    feed:        <FeedScreen        data={data} isMobile={true}/>,
+    feed:        <FeedScreen        data={data} config={config} handleConfigChange={handleConfigChange} isMobile={true}/>,
     profile:     <ProfileScreen     data={data} setScreen={setScreen} isMobile={true}/>,
     editprofile: <EditProfileScreen data={data} setScreen={setScreen} isMobile={true}/>,
-    approve:     <AwardScreen       data={data} setScreen={setScreen} isMobile={true}/>,
+    approve:     <AwardScreen       data={data} config={config} setScreen={setScreen} isMobile={true}/>,
     reports:     <TeamDashboard     data={data} setScreen={setScreen} isMobile={true}/>,
+    settings:    <SettingsScreen    config={config} handleConfigChange={handleConfigChange} isMobile={true}/>,
   };
   const unreadCount = notiAllRead ? 0 : (data.notifications || []).filter(n => n.unread).length;
   return (
@@ -151,7 +153,19 @@ const App = () => {
     () => window.MERIT_USERS[localStorage.getItem('sklm.email') || 'thitichaya.c@skilllane.com']
          || window.MERIT_USERS['thitichaya.c@skilllane.com']
   );
-  const data = { ...baseData, currentUser: activeUser };
+  const [config, setConfig] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem('sklm.config')) || window.MERIT_CONFIG_DEFAULTS; }
+    catch { return window.MERIT_CONFIG_DEFAULTS; }
+  });
+  const handleConfigChange = (newConfig) => {
+    setConfig(newConfig);
+    localStorage.setItem('sklm.config', JSON.stringify(newConfig));
+  };
+  const data = {
+    ...baseData,
+    currentUser: activeUser,
+    categories: (config.categories || []).filter(c => !c.archived).map(c => c.name),
+  };
   const toast = useToast();
   const vpAuto = useViewportAuto();
   const [screen,  setScreenRaw]  = React.useState(() => localStorage.getItem('sklm.screen')  || 'dashboard');
@@ -292,6 +306,7 @@ const App = () => {
             searchQuery={searchQuery} setSearchQuery={setSearchQuery}
             searchOpen={searchOpen} setSearchOpen={setSearchOpen}
             notiAllRead={notiAllRead} onMarkAllRead={() => setNotiAllRead(true)}
+            config={config} handleConfigChange={handleConfigChange}
           />
         </div>
       ) : renderAsRealMobile ? (
@@ -304,6 +319,7 @@ const App = () => {
             menuOpen={menuOpen} setMenuOpen={setMenuOpen}
             drawerScope="viewport"
             notiAllRead={notiAllRead} onMarkAllRead={() => setNotiAllRead(true)}
+            config={config} handleConfigChange={handleConfigChange}
           />
         </div>
       ) : (
@@ -324,6 +340,7 @@ const App = () => {
               menuOpen={menuOpen} setMenuOpen={setMenuOpen}
               drawerScope="frame"
               notiAllRead={notiAllRead} onMarkAllRead={() => setNotiAllRead(true)}
+              config={config} handleConfigChange={handleConfigChange}
             />
           </MobileFrame>
         </div>

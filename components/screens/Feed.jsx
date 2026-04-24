@@ -1,10 +1,13 @@
 // Recognition Feed — social-style, with composer
-const FeedScreen = ({ data, isMobile }) => {
+const FeedScreen = ({ data, isMobile, config }) => {
   const toast = useToast();
   const [posts, setPosts] = React.useState(data.recognitions);
   const [draft, setDraft] = React.useState('');
   const [recipient, setRecipient] = React.useState(data.recipients[0]);
-  const [category, setCategory] = React.useState('Peer recognition');
+  const [category, setCategory] = React.useState(() => {
+    const cats = (config || window.MERIT_CONFIG_DEFAULTS || { categories: [] }).categories.filter(c => !c.archived);
+    return cats.length > 0 ? cats[0].name : 'Peer recognition';
+  });
   const [amount, setAmount] = React.useState(50);
   const [search, setSearch] = React.useState('');
   const [stateMode, setStateMode] = React.useState('normal');
@@ -68,7 +71,10 @@ const FeedScreen = ({ data, isMobile }) => {
               </select>
               <span className="t-body-sm muted">for</span>
               <select value={category} onChange={e=>setCategory(e.target.value)} className="input" style={{width:'auto', padding:'6px 10px', fontSize:13, fontWeight:500}}>
-                {['Peer recognition','Shipped work','Above & beyond','Mentorship'].map(c => <option key={c}>{c}</option>)}
+                {(config || window.MERIT_CONFIG_DEFAULTS || { categories: [] }).categories
+                  .filter(c => !c.archived)
+                  .map(c => c.name)
+                  .map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
             <textarea

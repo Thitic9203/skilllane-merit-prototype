@@ -195,3 +195,40 @@ window.MERIT_DATA = {
     ],
   },
 };
+
+window.MERIT_CONFIG_DEFAULTS = {
+  categories: [
+    { id: 'c1', name: 'Shipped Work',     color: '#3B82F6',
+      activities: [
+        { id: 'a1', name: 'Major launch',    points: 200 },
+        { id: 'a2', name: 'Feature shipped', points: 100 },
+        { id: 'a3', name: 'Bug squash',      points: 50  },
+      ]
+    },
+    { id: 'c2', name: 'Peer Recognition', color: '#8B5CF6',
+      activities: [
+        { id: 'a4', name: 'Helpful review',  points: 50  },
+        { id: 'a5', name: 'Knowledge share', points: 30  },
+        { id: 'a6', name: 'Shoutout',        points: 25  },
+      ]
+    },
+    { id: 'c3', name: 'Above & Beyond',   color: '#F59E0B',
+      activities: [
+        { id: 'a7', name: 'Incident response', points: 150 },
+        { id: 'a8', name: 'Covered for team',  points: 80  },
+      ]
+    },
+    { id: 'c4', name: 'Milestone',        color: '#10B981',
+      activities: [
+        { id: 'a9',  name: 'Work anniversary', points: 120 },
+        { id: 'a10', name: 'Promotion',        points: 300 },
+      ]
+    },
+    { id: 'c5', name: 'Learning',         color: '#EC4899',
+      activities: [
+        { id: 'a11', name: 'Course completed', points: 60  },
+        { id: 'a12', name: 'Cert earned',      points: 100 },
+      ]
+    },
+  ]
+};

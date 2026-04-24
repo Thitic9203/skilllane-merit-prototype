@@ -1,5 +1,5 @@
 // Points History — chronological with filters
-const HistoryScreen = ({ data, isMobile }) => {
+const HistoryScreen = ({ data, isMobile, config }) => {
   const toast = useToast();
   const { activity, categories } = data;
   const [category, setCategory] = React.useState('All');
@@ -90,7 +90,15 @@ const HistoryScreen = ({ data, isMobile }) => {
         <div style={{width:1, height:20, background:'var(--border)'}}/>
         <select value={category} onChange={e=>setCategory(e.target.value)} className="input" style={{width:'auto', padding:'8px 12px', fontSize:13}}>
           <option>All</option>
+          {/* Active categories */}
           {categories.map(c => <option key={c}>{c}</option>)}
+          {/* Archived categories (if any, shown in a group) */}
+          {(() => {
+            const allCats = (config || window.MERIT_CONFIG_DEFAULTS || { categories: [] }).categories;
+            const archived = allCats.filter(c => c.archived);
+            if (!archived.length) return null;
+            return archived.map(c => <option key={'arch_'+c.id} value={c.name}>{c.name} (archived)</option>);
+          })()}
           <option>Reward</option>
         </select>
         <select value={range} onChange={e=>setRange(e.target.value)} className="input" style={{width:'auto', padding:'8px 12px', fontSize:13}}>

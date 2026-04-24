@@ -1,7 +1,12 @@
 // Admin: Award Points — form with recipient picker
-const AwardScreen = ({ data, isMobile, setScreen }) => {
+const AwardScreen = ({ data, isMobile, setScreen, config }) => {
   const toast = useToast();
   const [stateMode, setStateMode] = React.useState('normal');
+
+  // Resolve config: prop > window.MERIT_CONFIG_DEFAULTS > data.categories (legacy)
+  const resolvedConfig = config
+    || (typeof window !== 'undefined' && window.MERIT_CONFIG_DEFAULTS)
+    || null;
 
   // Loading: show skeleton while stateMode === 'loading'
   if (stateMode === 'loading') {
@@ -52,17 +57,57 @@ const AwardScreen = ({ data, isMobile, setScreen }) => {
     );
   }
 
-  return <AwardForm data={data} isMobile={isMobile} setScreen={setScreen} toast={toast} stateMode={stateMode} setStateMode={setStateMode}/>;
+  return <AwardForm data={data} isMobile={isMobile} setScreen={setScreen} toast={toast} stateMode={stateMode} setStateMode={setStateMode} config={resolvedConfig}/>;
 };
 
-const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }) => {
+const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode, config }) => {
+  // Resolve categories list from config or legacy data.categories
+  const configCategories = React.useMemo(() => {
+    if (config && Array.isArray(config.categories)) {
+      return config.categories.filter(c => !c.archived);
+    }
+    // Legacy fallback: data.categories is a string array
+    if (data && Array.isArray(data.categories)) {
+      return data.categories.map((name, i) => ({ id: `c${i}`, name, color: '#6B7280', archived: false, activities: [] }));
+    }
+    return [];
+  }, [config, data]);
+
+  const defaultCat = configCategories[0] || null;
+  const defaultActivity = defaultCat && defaultCat.activities && defaultCat.activities.length > 0
+    ? defaultCat.activities[0]
+    : null;
+
   const [recipients, setRecipients] = React.useState([data.recipients[0].id]);
-  const [amount, setAmount] = React.useState(100);
-  const [category, setCategory] = React.useState('Shipped Work');
+  const [selectedCatId, setSelectedCatId] = React.useState(defaultCat ? defaultCat.id : null);
+  const [selectedActivityId, setSelectedActivityId] = React.useState(defaultActivity ? defaultActivity.id : null);
+  const [amount, setAmount] = React.useState(defaultActivity ? defaultActivity.points : 100);
   const [note, setNote] = React.useState('');
   const [announce, setAnnounce] = React.useState(true);
   const [confirmed, setConfirmed] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
+
+  const selectedCat = configCategories.find(c => c.id === selectedCatId) || null;
+  const activitiesForCat = selectedCat && Array.isArray(selectedCat.activities)
+    ? selectedCat.activities.filter(a => !a.archived)
+    : [];
+  const selectedActivity = activitiesForCat.find(a => a.id === selectedActivityId) || null;
+
+  const handleSelectCategory = (cat) => {
+    setSelectedCatId(cat.id);
+    const firstActivity = Array.isArray(cat.activities) ? cat.activities.filter(a => !a.archived)[0] : null;
+    if (firstActivity) {
+      setSelectedActivityId(firstActivity.id);
+      setAmount(firstActivity.points);
+    } else {
+      setSelectedActivityId(null);
+    }
+  };
+
+  const handleSelectActivity = (activity) => {
+    setSelectedActivityId(activity.id);
+    setAmount(activity.points);
+  };
 
   const submit = () => {
     if (!canSubmit || submitting) return;
@@ -108,7 +153,14 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
             {total.toLocaleString()} points distributed to {recipients.length} {recipients.length===1?'person':'people'}. They will be notified now.
           </p>
           <div style={{display:'flex', gap:10, justifyContent:'center'}}>
-            <button className="btn btn-ghost" onClick={() => { setConfirmed(false); setNote(''); setRecipients([]); setAmount(100); }}>Award more</button>
+            <button className="btn btn-ghost" onClick={() => {
+              setConfirmed(false);
+              setNote('');
+              setRecipients([]);
+              setAmount(defaultActivity ? defaultActivity.points : 100);
+              setSelectedCatId(defaultCat ? defaultCat.id : null);
+              setSelectedActivityId(defaultActivity ? defaultActivity.id : null);
+            }}>Award more</button>
             <button className="btn btn-primary" onClick={() => setScreen('reports')}>Go to team dashboard <Icon name="arrow-right" size={14}/></button>
           </div>
         </div>
@@ -164,19 +216,62 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
             </div>
           </Field>
 
+          {/* Step 1 — Category */}
           <Field label="Category">
             <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
-              {data.categories.map(c => (
-                <button key={c} onClick={()=>setCategory(c)} style={{
-                  padding:'8px 14px', borderRadius:8, fontSize:13, fontWeight:500,
-                  background: category === c ? 'var(--nav-navy)' : 'var(--surface-muted)',
-                  color: category === c ? '#fff' : 'var(--text-muted)',
-                  border: `1px solid ${category === c ? 'var(--nav-navy)' : 'var(--border-soft)'}`,
-                }}>{c}</button>
-              ))}
+              {configCategories.map(cat => {
+                const active = selectedCatId === cat.id;
+                return (
+                  <button key={cat.id} onClick={() => handleSelectCategory(cat)} style={{
+                    display:'flex', alignItems:'center', gap:6,
+                    padding:'8px 14px', borderRadius:8, fontSize:13, fontWeight:500,
+                    background: active ? 'var(--nav-navy)' : 'var(--surface-muted)',
+                    color: active ? '#fff' : 'var(--text-muted)',
+                    border: `1px solid ${active ? 'var(--nav-navy)' : 'var(--border-soft)'}`,
+                    transition:'all 150ms ease-out',
+                  }}>
+                    <span style={{
+                      width:8, height:8, borderRadius:'50%',
+                      background: cat.color || '#6B7280',
+                      flexShrink:0,
+                      opacity: active ? 1 : 0.7,
+                    }}/>
+                    {cat.name}
+                  </button>
+                );
+              })}
             </div>
           </Field>
 
+          {/* Step 2 — Activity (shown when category selected and has activities) */}
+          {selectedCat && activitiesForCat.length > 0 && (
+            <Field label="Activity">
+              <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+                {activitiesForCat.map(activity => {
+                  const active = selectedActivityId === activity.id;
+                  return (
+                    <button key={activity.id} onClick={() => handleSelectActivity(activity)} style={{
+                      padding:'8px 14px', borderRadius:8, fontSize:13, fontWeight:500,
+                      background: active ? 'var(--nav-navy)' : 'var(--surface-muted)',
+                      color: active ? '#fff' : 'var(--text-muted)',
+                      border: `1px solid ${active ? 'var(--nav-navy)' : 'var(--border-soft)'}`,
+                      transition:'all 150ms ease-out',
+                    }}>
+                      {activity.name}
+                      <span style={{
+                        marginLeft:6,
+                        opacity: active ? 0.75 : 0.55,
+                        fontSize:12,
+                        fontWeight:400,
+                      }}>· {activity.points} pts</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </Field>
+          )}
+
+          {/* Step 3 — Amount per person */}
           <Field label="Amount per person">
             <div style={{display:'flex', gap:10, alignItems:'center', flexWrap:'wrap'}}>
               <div style={{display:'flex', gap:6, flexWrap:'wrap'}}>
@@ -235,7 +330,23 @@ const AwardForm = ({ data, isMobile, setScreen, toast, stateMode, setStateMode }
                 <strong>{recipients.length === 1 ? data.recipients.find(p=>p.id===recipients[0]).name.split(' ')[0] : `${recipients.length} colleagues`}</strong>
                 <span className="chip chip-gold" style={{padding:'3px 9px', fontSize:11}}><CoinGlyph size={11}/>+{amount}</span>
               </div>
-              <div className="t-caption muted" style={{marginTop:4}}>{category}</div>
+              <div style={{marginTop:4}}>
+                {selectedCat && (
+                  <div style={{display:'flex', alignItems:'center', gap:5}}>
+                    <span style={{
+                      width:7, height:7, borderRadius:'50%',
+                      background: selectedCat.color || '#6B7280',
+                      flexShrink:0,
+                    }}/>
+                    <span className="t-caption muted">{selectedCat.name}</span>
+                  </div>
+                )}
+                {selectedActivity && (
+                  <div className="t-caption" style={{color:'var(--text-subtle)', marginTop:2, paddingLeft:12}}>
+                    {selectedActivity.name}
+                  </div>
+                )}
+              </div>
               <p style={{margin:'10px 0 0', fontSize:13.5, lineHeight:1.55, color: note ? 'var(--text)' : 'var(--text-subtle)', fontStyle: note ? 'normal' : 'italic'}}>
                 {note || 'Your note will appear here.'}
               </p>

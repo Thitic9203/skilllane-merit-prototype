@@ -27,6 +27,7 @@ const Icon = ({ name, size = 20, className = '', style }) => {
     case 'menu':        return <svg {...p}><path d="M4 7h16M4 12h16M4 17h16"/></svg>;
     case 'monitor':     return <svg {...p}><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>;
     case 'smartphone':  return <svg {...p}><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg>;
+    case 'settings':    return <svg {...p}><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>;
     default: return null;
   }
 };
@@ -192,6 +193,7 @@ const Sidebar = ({ screen, setScreen, isAdmin }) => {
   const adminItems = [
     { id: 'approve',      label: 'Approvals',      icon: 'send' },
     { id: 'reports',      label: 'Reports',        icon: 'chart' },
+    { id: 'settings',     label: 'Settings',       icon: 'settings' },
   ];
   const Item = ({ it }) => {
     const active = screen === it.id;

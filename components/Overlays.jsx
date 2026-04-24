@@ -444,6 +444,7 @@ const MobileMenuDrawer = ({ open, onClose, screen, setScreen, isAdmin, currentUs
   const adminItems = [
     { id: 'approve',      label: 'Approvals',     icon: 'send',     desc: 'Review pending entries' },
     { id: 'reports',      label: 'Reports',       icon: 'chart',    desc: 'Team trends and top performers' },
+    { id: 'settings',     label: 'Settings',      icon: 'settings', desc: 'Manage categories and activities' },
   ];
 
   const Item = ({ it }) => {
