@@ -1,0 +1,29 @@
+name: Auto cache-bust on deploy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'index.html'
+      - '.github/**'
+
+jobs:
+  cache-bust:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump version in index.html
+        run: |
+          VERSION=$(date -u +%Y%m%d%H%M%S)
+          sed -i "s/?v=[A-Za-z0-9]*/?v=${VERSION}/g" index.html
+          sed -i "s/window\.__V='[^']*'/window.__V='${VERSION}'/" index.html
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add index.html
+          git diff --staged --quiet || git commit -m "chore: cache-bust ${VERSION} [skip ci]"
+          git push
