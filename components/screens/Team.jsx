@@ -82,7 +82,7 @@ const TeamDashboard = ({ data, isMobile, setScreen }) => {
           </div>
           <div style={{marginTop:20, paddingTop:16, borderTop:'1px solid var(--border-soft)', display:'flex', justifyContent:'space-between'}}>
             <span className="t-caption muted">Total awards</span>
-            <span className="num" style={{fontSize:14, fontWeight:600}}>247 · Apr 2026</span>
+            <span className="num" style={{fontSize:14, fontWeight:600}}>247 · {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
           </div>
         </section>
       </div>

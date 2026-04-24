@@ -235,7 +235,7 @@ const Sidebar = ({ screen, setScreen, isAdmin }) => {
         border: '1px solid var(--border-soft)', marginTop: 16,
       }}>
         <div className="t-label muted" style={{marginBottom:6}}>Year ends</div>
-        <div style={{fontSize:15, fontWeight:600}}>Dec 31 · <span className="num muted">255 days</span></div>
+        <div style={{fontSize:15, fontWeight:600}}>Dec 31 · <span className="num muted">{Math.round((new Date(new Date().getFullYear(), 11, 31) - new Date()) / 86400000)} days</span></div>
         <div className="t-body-sm muted" style={{marginTop:6}}>Wallet resets on Jan 1. Use your points!</div>
       </div>
     </nav>

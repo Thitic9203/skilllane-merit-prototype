@@ -142,7 +142,7 @@ const LoginScreen = ({ onSignIn, theme }) => {
         </svg>
         <div style={{flex:1}}/>
         <div style={{maxWidth: 460, position:'relative'}}>
-          <div className="t-label" style={{color:'var(--accent-gold)', marginBottom:20}}>Internal · 2026</div>
+          <div className="t-label" style={{color:'var(--accent-gold)', marginBottom:20}}>Internal · {new Date().getFullYear()}</div>
           <h1 style={{fontSize:'clamp(40px, 5vw, 56px)', fontWeight:600, lineHeight:1.05, letterSpacing:'-0.025em', margin:0}}>
             Recognition, <span style={{color:'var(--accent-gold)', fontStyle:'italic', fontWeight:500}}>measured</span>.
           </h1>
@@ -208,7 +208,7 @@ const LoginScreenMobile = ({ onSignIn }) => {
     <div style={{minHeight:'100%', background:'var(--nav-navy)', color:'#fff', display:'flex', flexDirection:'column', padding:'32px 24px 40px'}}>
       <Brand/>
       <div style={{flex:1, display:'flex', flexDirection:'column', justifyContent:'center', paddingTop:20, paddingBottom:32}}>
-        <div className="t-label" style={{color:'var(--accent-gold)', marginBottom:14}}>Internal · 2026</div>
+        <div className="t-label" style={{color:'var(--accent-gold)', marginBottom:14}}>Internal · {new Date().getFullYear()}</div>
         <h1 style={{fontSize:38, fontWeight:600, lineHeight:1.05, letterSpacing:'-0.025em', margin:0}}>
           Recognition,<br/><span style={{color:'var(--accent-gold)', fontStyle:'italic', fontWeight:500}}>measured</span>.
         </h1>
